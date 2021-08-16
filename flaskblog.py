@@ -1,5 +1,6 @@
-from flask import Flask , render_template, url_for
+from flask import Flask , render_template, url_for, flash, redirect
 from forms import  RegistrationFrom,LoginForm
+
 #instantiate flask variable , __name__ is similar to main
 app = Flask(__name__)
 
@@ -26,9 +27,13 @@ def home():
 def about():
     return render_template('about.html',title='about')
 
-@app.route("/register")
+@app.route("/register", methods=['GET','POST'])
 def register():
     form =RegistrationFrom()
+    if form.validate_on_submit():
+        # success is a bootstrap class
+        flash(f'Account created for {form.username.data}!','success')
+        return redirect(url_for('home'))
     return render_template('register.html',title='Register',form=form)
 
 
